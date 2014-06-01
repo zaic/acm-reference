@@ -91,29 +91,3 @@ void dfs(int v, int par) {
 		if (low[ g[v][i] ] >= num[v]) release(v, g[v][i]);
 	}
 }
-
-// ***** Searching for strongly-connected components *****
-int st[maxn];
-bool instak[maxn];
-int stak_cnt;
-void dfs(int v) {
-    num[v] = low[v] = cur++;
-    st[stak_cnt++] = v;
-    instak[v] = 1;
-    for (int i = 0; i < g[v].size(); ++i) {
-        int p = g[v][i];
-        if (!was[p]) {
-            dfs(p);
-            low[v] = min(low[v], low[p]);
-        } else if (instak[p]) low[v] = min(low[v], num[p]);
-    }
-    if (low[v] == num[v]) {
-        while (st > 0) {
-            int p = st[stak_cnt - 1];
-            --stak_cnt;
-            comp_num[p] = comp_cnt;
-            if (p == v) break;
-        }
-        ++comp_cnt;
-    }
-}
