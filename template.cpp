@@ -4,7 +4,7 @@ using namespace std;
 void E(){}template<class A,class...B>void E(A $,B..._){cerr<<' '<<$;E(_...);}
 # define E($...) E(#$,'=',$,'\n')
 #else
-# define E(x...)
+# define E($...)
 #endif
 #define Sz(x) (int((x).size()))
 #define All(x) begin(x),end(x)
