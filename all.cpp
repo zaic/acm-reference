@@ -33,6 +33,7 @@ struct Point { //integer point
 	inline Point() : x(0), y(0) {}
 	inline Point(int _x, int _y) : x(_x), y(_y) {}
 	inline int len2() const { return x * x + y * y; }
+    inline int operator!() const { return x*x + y*y; }
 	inline const Point operator + (const Point &b) const {
 		return Point(x + b.x, y + b.y);
 	}
@@ -143,36 +144,42 @@ bool inPolygon(const Point &p, int n, const Point *arr, bool strict = false) {
 
 // Graham's convex hull
 // changes order of points! no equal points allowed! must have nonzero area
-bool cmp(const Point &a, const Point &b) {
-	return a.x < b.x || a.x == b.x && a.y < b.y;
+Point hctr;
+bool cmpHull(const Point &a, const Point &b) {
+    Point ad = a − hctr;
+    Point bd = b − hctr;
+    int tv = vect(ad, bd);
+    if (tv) return tv > 0;
+    return ad.len2() < bd.len2();
 }
-bool cw(const Point &a, const Point &b, const Point &c) {
-	return a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y) < 0;
+void ConvexHull(int n, Point *arr, int &k, Point *res, bool strict = true) {
+    int i;
+    int best = 0;
+    for (i = 1; i<n; i++) {
+        if (arr[i].x < arr[best].x) best = i;
+        if (arr[i].x == arr[best].x && arr[i].y < arr[best].y) best = i;
+    }
+    std::swap(arr[best], arr[0]);
+    hctr = arr[0];
+    std::sort(arr+1, arr+n, cmpHull);
+    k = 0;
+    res[k++] = arr[0];
+    res[k++] = arr[1];
+    for (i = 2; i<n; i++) {
+        if (strict) while (k>=2 && vect(res[k−1]−res[k−2], arr[i]−res[k−2]) <= 0) k−−;
+        if (!strict) while (k>=2 && vect(res[k−1]−res[k−2], arr[i]−res[k−2]) < 0) k−−;
+        res[k++] = arr[i];
+    }
+    if (!strict) {
+        k−−;
+        for (i = n−1; i>0; i−−) {
+            Page 18 of 25
+                res[k++] = arr[i];
+            if (vect(arr[i]−arr[0], arr[i−1]−arr[0]) != 0) break;
+        }
+    }
 }
-bool ccw (const Point &a, const Point &b, const Point &c) {
-	return a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y) > 0;
-}
-void convex_hull(vector<Point> &a) {
-	if (a.size() == 1) return;
-	sort(a.begin(), a.end(), &cmp);
-	Point p1 = a[0], p2 = a.back();
-	vector<Point> up, down;
-	up.push_back(p1);
-	down.push_back(p1);
-	for (size_t i = 1; i < a.size(); ++i) {
-		if (i == a.size() - 1 || cw(p1, a[i], p2)) {
-			while (up.size() >= 2 && !cw(up[up.size() - 2], up[up.size() - 1], a[i])) up.pop_back();
-			up.push_back(a[i]);
-		}
-		if (i == a.size() - 1 || ccw(p1, a[i], p2)) {
-			while (down.size() >= 2 && !ccw(down[down.size() - 2], down[down.size() - 1], a[i])) down.pop_back();
-			down.push_back(a[i]);
-		}
-	}
-	a.clear();
-	for (size_t i = 0; i < up.size(); ++i) a.push_back(up[i]);
-	for (size_t i = down.size() - 2; i > 0; --i) a.push_back(down[i]);
-}
+
 
 //real_t point
 //Line crosses Line (infinite)
