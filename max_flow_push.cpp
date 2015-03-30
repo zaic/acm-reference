@@ -77,6 +77,7 @@ struct PreflowMaxFlow {
             discharge(v);
             if (h[v] > prevh) {
                 l.push_front(v);
+                l.erase(it);
                 it = l.begin();
             }
             ++it;
