@@ -73,7 +73,7 @@ struct DinitsMaxFlow {
         return 0;
     }
 
-    flt go() {
+    weight_t go() {
         flt res = 0;
         while (bfs()) {
             memset(sid, 0, sizeof(sid));
