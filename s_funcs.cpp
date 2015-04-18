@@ -12,9 +12,13 @@ void prefix_function(const char *s, int *pi) {
 void z_function(const char *st, int *z) {
 	int i, j = 0, r = 0, l;
 	z[0] = l = strlen(st);
+    z[l] = '#';
 	for (i = 1; i < l; ++i) {
-		z[i] = max(min(r - i, z[i - j]), 0);
-		for ( ; i + z[i] < l && st[z[i]] == st[i + z[i]]; ++z[i]);
+        if (i <= r)
+            z[i] = min(r - i, z[i - j]);
+        else
+            z[i] = 0;
+		for ( ; st[z[i]] == st[i + z[i]]; ++z[i]);
 		if (i + z[i] > r) {
 			r = i + z[i];
 			j = i;
