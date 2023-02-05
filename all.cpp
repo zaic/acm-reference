@@ -166,16 +166,16 @@ void ConvexHull(int n, Point *arr, int &k, Point *res, bool strict = true) {
     res[k++] = arr[0];
     res[k++] = arr[1];
     for (i = 2; i<n; i++) {
-        if (strict) while (k>=2 && vect(res[k−1]−res[k−2], arr[i]−res[k−2]) <= 0) k--;
-        if (!strict) while (k>=2 && vect(res[k−1]−res[k−2], arr[i]−res[k−2]) < 0) k--;
+        if (strict) while (k>=2 && vect(res[k-1]-res[k-2], arr[i]-res[k−2]) <= 0) k--;
+        if (!strict) while (k>=2 && vect(res[k-1]-res[k-2], arr[i]-res[k−2]) < 0) k--;
         res[k++] = arr[i];
     }
     if (!strict) {
         k--;
-        for (i = n−1; i>0; i--) {
+        for (i = n-1; i>0; i--) {
             Page 18 of 25
                 res[k++] = arr[i];
-            if (vect(arr[i]-arr[0], arr[i−1]-arr[0]) != 0) break;
+            if (vect(arr[i]-arr[0], arr[i-1]-arr[0]) != 0) break;
         }
     }
 }
