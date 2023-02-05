@@ -1,0 +1,12 @@
+name: Build reference PDF
+
+on:
+  push:
+    branches: [ master, testci ]
+
+jobs:
+  build:
+    uses: xu-cheng/latex-action@v2
+    with:
+      working_directory: "tex"
+      root_file: "reference.tex"
