@@ -8,10 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Build PDF
         uses: xu-cheng/latex-action@2.7.0
         with:
-          root_file: "tex/reference.tex"
+          working_directory: tex
+          root_file: reference.tex
+
       - name: Upload PDF
         uses: actions/upload-artifact@v3
         with:
