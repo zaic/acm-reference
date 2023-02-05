@@ -8,9 +8,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build pdf
+      - name: Build PDF
         uses: xu-cheng/latex-action@2.7.0
         with:
           glob_root_file: true
-          root_file: "*/*.qtex"
+          root_file: "*/*.tex"
+      - name: Upload PDF
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: main.pdf
           
