@@ -6,7 +6,9 @@ on:
 
 jobs:
   build:
-    uses: xu-cheng/latex-action@v2
-    with:
-      working_directory: "tex"
-      root_file: "reference.tex"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: xu-cheng/latex-action@v2
+        with:
+          working_directory: "tex"
+          root_file: "reference.tex"
