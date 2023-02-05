@@ -10,4 +10,5 @@ jobs:
     steps:
       - uses: xu-cheng/latex-action@v2
         with:
-          root_file: "./tex/reference.tex"
+          root_file: tex/reference.tex
+          
