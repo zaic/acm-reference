@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build pdf
-        uses: xu-cheng/latex-action@v2
+        uses: xu-cheng/latex-action@2.7.0
         with:
-          root_file: ./tex/reference.tex
+          working_directory: tex
+          root_file: reference.tex
           
