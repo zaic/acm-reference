@@ -11,8 +11,7 @@ jobs:
       - name: Build PDF
         uses: xu-cheng/latex-action@2.7.0
         with:
-          glob_root_file: true
-          root_file: "*/*.tex"
+          root_file: "tex/*.tex"
       - name: Upload PDF
         uses: actions/upload-artifact@v3
         with:
