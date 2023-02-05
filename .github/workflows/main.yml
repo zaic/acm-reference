@@ -11,7 +11,6 @@ jobs:
       - name: Build pdf
         uses: xu-cheng/latex-action@2.7.0
         with:
-          working_directory: tex
           glob_root_file: true
-          root_file: reference.tex
+          root_file: "*/*.tex"
           
