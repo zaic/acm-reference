@@ -1,26 +1,3 @@
-// ***************** Setting the line up in the bitset *****************
-inline const bool test(dword *arr, const int &x) {
-	return (arr[x >> 5] >> (x & 31)) & 1;
-}
-inline void setBit(dword *arr, const int &x) {
-	arr[x >> 5] |= (1 << (x & 31));
-}
-inline const dword getMask(const int &l, const int &r) {
-	return (r < 32 ? (dword(1) << r) : dword(0)) - (dword(1) << l);
-}
-inline void setLine(dword *arr, int l, int r) {
-	if (l > r) return;
-	int li = (l >> 5);
-	int ri = (r >> 5);
-	if (li == ri) {
-		arr[li] |= getMask(l - (li << 5), r + 1 - (ri << 5));
-		return;
-	}
-	arr[li] |= getMask(l - (li << 5), 32);
-	arr[ri] |= getMask(0, r + 1 - (ri << 5));
-	for (int i = li + 1; i <= ri - 1; ++i) arr[i] = dword(-1);
-}
-
 // **************************** all submasks ***************************
 for (int s = m; ;s = (s - 1) & m) {
     do_smth(s);
@@ -180,26 +157,6 @@ void ConvexHull(int n, Point *arr, int &k, Point *res, bool strict = true) {
     }
 }
 
-
-//real_t point
-//Line crosses Line (infinite)
-bool CrossLineLine(const Point &a1, const Point &b1, const Point &a2, const Point &b2, Point &res) {
-	real_t a11 = b1.x - a1.x;
-	real_t a12 = a2.x - b2.x;
-	real_t a21 = b1.y - a1.y;
-	real_t a22 = a2.y - b2.y;
-	real_t xb1 = a2.x - a1.x;
-	real_t xb2 = a2.y - a1.y;
-	real_t det  = a11 * a22 - a12 * a21;
-	real_t detu = xb1 * a22 - a12 * xb2;
-	real_t detv = a11 * xb2 - xb1 * a21;
-	if (abs(det) < EPS) return false;
-	detu /= det;
-	detv /= det;
-	Point c = a1 + (a2 - a1) * detu;
-	res = c;
-	return true;
-}
 
 //Line crosses Circle (infinite)
 bool CrossLineCircle(const Point &la, const Point &lb, const Point &cc, real_t cr, Point &res1, Point &res2) {
@@ -394,43 +351,3 @@ for (;;) {
 	}
 }
 
-// *************************** maxflow:Dinits ***************************
-int n, c[MAXN][MAXN], f[MAXN][MAXN], s, t, d[MAXN], ptr[MAXN], q[MAXN];
-
-bool bfs() {
-	int qh=0, qt=0;
-	q[qt++] = s;
-	memset(d, -1, n * sizeof(d[0]));
-	d[s] = 0;
-	while (qh < qt) {
-		int v = q[qh++];
-		for (int to = 0; to < n; ++to) if (d[to] == -1 && f[v][to] < c[v][to]) {
-			q[qt++] = to;
-			d[to] = d[v] + 1;
-		}
-	}
-	return d[t] != -1;
-}
-int dfs (int v, int flow) {
-	if (!flow) return 0;
-	if (v == t) return flow;
-	for (int &to = ptr[v]; to < n; ++to) {
-		if (d[to] != d[v] + 1)  continue;
-		int pushed = dfs(to, min(flow, c[v][to] - f[v][to]));
-		if (pushed) {
-			f[v][to] += pushed;
-			f[to][v] -= pushed;
-			return pushed;
-		}
-	}
-	return 0;
-}
-int dinic() {
-	int flow = 0;
-	for (;;) {
-		if (!bfs()) break;
-		memset(ptr, 0, n * sizeof ptr[0]);
-		while (int pushed = dfs (s, INF)) flow += pushed;
-	}
-	return flow;
-}
